@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Переходник Nitex</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0a0a0a, #1a1a1a, #2d2d2d);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            padding: 20px;
+        }
+        
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        .particle {
+            position: absolute;
+            background: rgba(100, 149, 237, 0.6);
+            border-radius: 50%;
+            animation: floatParticle 15s infinite linear;
+        }
+        
+        @keyframes floatParticle {
+            0% {
+                transform: translateY(0) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+            transform: rotate(30deg);
+            animation: shine 8s infinite linear;
+            pointer-events: none;
+        }
+        
+        @keyframes shine {
+            0% { transform: rotate(30deg) translateX(-100%); }
+            100% { transform: rotate(30deg) translateX(100%); }
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            text-shadow: 0 0 15px rgba(100, 149, 237, 0.8);
+            animation: pulse 2s infinite;
+            background: linear-gradient(135deg, #6495ED, #4169E1, #1E90FF);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .icon {
+            font-size: 4rem;
+            display: inline-block;
+            margin-right: 15px;
+            animation: float 6s ease-in-out infinite;
+            filter: drop-shadow(0 5px 15px rgba(100, 149, 237, 0.4));
+            color: #6495ED;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .instructions {
+            background: rgba(30, 30, 30, 0.7);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 2;
+            border: 1px solid rgba(100, 149, 237, 0.3);
+            transition: transform 0.3s ease;
+        }
+        
+        .instructions:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        }
+        
+        .instructions h2 {
+            font-size: 2rem;
+            margin-bottom: 25px;
+            text-align: center;
+            color: #6495ED;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+        }
+        
+        .steps {
+            list-style: none;
+        }
+        
+        .steps li {
+            margin-bottom: 25px;
+            padding-left: 60px;
+            position: relative;
+            font-size: 1.2rem;
+            line-height: 1.6;
+            opacity: 0;
+            animation: fadeIn 0.8s forwards;
+        }
+        
+        .steps li:nth-child(1) { animation-delay: 0.3s; }
+        .steps li:nth-child(2) { animation-delay: 0.6s; }
+        .steps li:nth-child(3) { animation-delay: 0.9s; }
+        .steps li:nth-child(4) { animation-delay: 1.2s; }
+        .steps li:nth-child(5) { animation-delay: 1.5s; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .steps li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #4169E1, #6495ED);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.4rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .steps li:nth-child(1)::before { content: '👋'; }
+        .steps li:nth-child(2)::before { content: '✈️'; }
+        .steps li:nth-child(3)::before { content: '💼'; }
+        .steps li:nth-child(4)::before { content: '🗒️'; }
+        .steps li:nth-child(5)::before { content: '🌐'; }
+        
+        .highlight {
+            background: linear-gradient(135deg, #6495ED, #4169E1);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: bold;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .conclusion {
+            text-align: center;
+            font-size: 1.8rem;
+            margin-top: 40px;
+            padding: 20px;
+            background: rgba(100, 149, 237, 0.2);
+            border-radius: 15px;
+            position: relative;
+            z-index: 2;
+            animation: glow 2s infinite alternate;
+        }
+        
+        @keyframes glow {
+            from { box-shadow: 0 0 10px rgba(100, 149, 237, 0.4); }
+            to { box-shadow: 0 0 25px rgba(100, 149, 237, 0.8); }
+        }
+        
+        .telegram-btn {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #4169E1, #6495ED);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .telegram-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        .telegram-btn:hover::before {
+            left: 100%;
+        }
+        
+        .telegram-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+        
+        .telegram-btn i {
+            margin-right: 10px;
+        }
+        
+        .features {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin: 30px 0;
+            gap: 20px;
+        }
+        
+        .feature {
+            background: rgba(30, 30, 30, 0.7);
+            border-radius: 15px;
+            padding: 20px;
+            width: 150px;
+            text-align: center;
+            border: 1px solid rgba(100, 149, 237, 0.3);
+            transition: transform 0.3s ease;
+        }
+        
+        .feature:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        }
+        
+        .feature i {
+            font-size: 2.5rem;
+            color: #6495ED;
+            margin-bottom: 10px;
+        }
+        
+        .feature p {
+            font-size: 0.9rem;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .container { padding: 25px; }
+            .instructions { padding: 20px; }
+            .steps li { padding-left: 50px; font-size: 1.1rem; }
+            .conclusion { font-size: 1.5rem; }
+            .features { gap: 10px; }
+            .feature { width: 130px; padding: 15px; }
+        }
+        
+        @media (max-width: 480px) {
+            h1 { font-size: 2rem; }
+            .icon { font-size: 3rem; }
+            .steps li { padding-left: 40px; }
+            .steps li::before { width: 35px; height: 35px; }
+            .feature { width: 100px; }
+            .feature i { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    
+    <div class="container">
+        <header>
+            <h1><span class="icon"><i class="fas fa-exchange-alt"></i></span>Переходник Nitex</h1>
+            <p>Официальный переходник для ваших проектов</p>
+        </header>
+        
+        <div class="instructions">
+            <h2>Информация о переходнике</h2>
+            <ul class="steps">
+                <li>Переходник <span class="highlight">@fucknitex</span></li>
+                <li>Инфо в тг <span class="highlight">@infonitex</span> а так же ниже</li>
+                <li>Портфолио <span class="highlight">@portfolionitex</span> там мои ворки</li>
+                <li>Репутация <span class="highlight">@repnitex</span> 120+rep</li>
+                <li>Проекты <span class="highlight">@SellEmojis</span> и <span class="highlight">@firerent</span></li>
+            </ul>
+        </div>
+        
+        <div class="features">
+            <div class="feature">
+                <i class="fas fa-bolt"></i>
+                <p>Быстро</p>
+            </div>
+            <div class="feature">
+                <i class="fas fa-shield-alt"></i>
+                <p>Надежно</p>
+            </div>
+            <div class="feature">
+                <i class="fas fa-lock"></i>
+                <p>Безопасно</p>
+            </div>
+        </div>
+        
+        <div class="conclusion">
+            • Вся основа переходника тут, остальное в тг.
+        </div>
+        
+        <center>
+            <a href="http://t.me/fucknitex" class="telegram-btn">
+                <i class="fab fa-telegram"></i> Перейти в Telegram
+            </a>
+        </center>
+    </div>
+
+        <center>
+            <a href="http://t.me/tmdlegback" class="telegram-btn">
+                <i class="fab fa-telegram"></i> tmdleg back
+            </a>
+        </center>
+    </div>
+    
+    <footer>
+        <p>Nitex Transition © 2023 | Все права защищены</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.querySelector('.container');
+            document.addEventListener('mousemove', function(e) {
+                let x = e.clientX / window.innerWidth;
+                let y = e.clientY / window.innerHeight;
+                
+                container.style.transform = `perspective(1000px) rotateX(${y * -5}deg) rotateY(${x * 5}deg)`;
+            });
+            
+            document.addEventListener('scroll', function() {
+                const scrolled = window.pageYOffset;
+                const rate = scrolled * -0.5;
+                document.body.style.backgroundPosition = `center ${rate}px`;
+            });
+            
+            const items = document.querySelectorAll('.steps li');
+            items.forEach((item, index) => {
+                item.style.animationDelay = `${index * 0.3 + 0.5}s`;
+            });
+            
+            const particlesContainer = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                const size = Math.random() * 10 + 2;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                particle.style.left = `${Math.random() * 100}vw`;
+                particle.style.top = `${Math.random() * 100}vh`;
+                
+                particle.style.animationDelay = `${Math.random() * 15}s`;
+                particle.style.animationDuration = `${Math.random() * 10 + 15}s`;
+                
+                particlesContainer.appendChild(particle);
+            }
+            
+            const features = document.querySelectorAll('.feature');
+            features.forEach((feature, index) => {
+                feature.style.animation = `fadeIn 0.8s forwards ${index * 0.2 + 2}s`;
+                feature.style.opacity = 0;
+            });
+        });
+    </script>
+</body>
+</html>
